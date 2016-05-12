@@ -6257,6 +6257,18 @@ public class WindowManagerService extends IWindowManager.Stub
     public void rebootSafeMode(boolean confirm) {
         ShutdownThread.rebootSafeMode(mContext, confirm);
     }
+    
+    // Called by window manager policy.  Not exposed externally.
+    @Override
+    public void reboot(boolean confirm) {
+        ShutdownThread.reboot(mContext, null, confirm);
+    }
+    
+    // Called by window manager policy.  Not exposed externally.
+    @Override
+    public void rebootRecovery(boolean confirm) {
+        ShutdownThread.reboot(mContext, "recovery", confirm);
+    }
 
     /** M: [SmartBook]
          * Notify WMS the SmartBook plug state from UEvent

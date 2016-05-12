@@ -107,6 +107,8 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     private static final String GLOBAL_ACTION_KEY_USERS = "users";
     private static final String GLOBAL_ACTION_KEY_SETTINGS = "settings";
     private static final String GLOBAL_ACTION_KEY_LOCKDOWN = "lockdown";
+    private static final String GLOBAL_ACTION_KEY_REBOOT = "reboot";
+    private static final String GLOBAL_ACTION_KEY_REBOOT_RECOVERY = "recovery";
 
     private final Context mContext;
     private final WindowManagerFuncs mWindowManagerFuncs;
@@ -304,11 +306,23 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
                 // If we already have added this, don't add it again.
                 continue;
             }
-            if (GLOBAL_ACTION_KEY_POWER.equals(actionKey)) {
+            if (GLOBAL_ACTION_KEY_POWER.equals(actionKey)) 
+            {
                 mItems.add(new PowerAction());
-            } else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) {
+            } 
+            else if(GLOBAL_ACTION_KEY_REBOOT.equals(actionKey)) 
+            {
+				mItems.add(getRebootAction());
+            }
+            else if(GLOBAL_ACTION_KEY_REBOOT_RECOVERY.equals(actionKey)) 
+            {
+				mItems.add(getRebootRecoveryAction());
+            } 
+            else if (GLOBAL_ACTION_KEY_AIRPLANE.equals(actionKey)) 
+            {
                 mItems.add(mAirplaneModeOn);
-            } else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
+            } 
+            else if (GLOBAL_ACTION_KEY_BUGREPORT.equals(actionKey)) {
                 if (Settings.Global.getInt(mContext.getContentResolver(),
                         Settings.Global.BUGREPORT_IN_POWER_MENU, 0) != 0 && isCurrentUserOwner()) {
                     mItems.add(getBugReportAction());
@@ -390,6 +404,48 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
             // shutdown by making sure radio and power are handled accordingly.
             mWindowManagerFuncs.shutdown(false /* confirm */);
         }
+    }
+    
+    private Action getRebootAction() {
+        return new SinglePressAction(0, //com.android.internal.R.drawable.ic_lock_reboot,
+                R.string.global_action_reboot) {
+
+            @Override
+            public void onPress() {
+                mWindowManagerFuncs.reboot(false /* confirm */);
+            }
+
+            @Override
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            @Override
+            public boolean showBeforeProvisioning() {
+                return true;
+            }
+        };
+    }
+    
+    private Action getRebootRecoveryAction() {
+        return new SinglePressAction(0, //com.android.internal.R.drawable.ic_lock_reboot_recovery,
+                R.string.global_action_reboot_recovery) {
+
+            @Override
+            public void onPress() {
+                mWindowManagerFuncs.rebootRecovery(false /* confirm */);
+            }
+
+            @Override
+            public boolean showDuringKeyguard() {
+                return true;
+            }
+
+            @Override
+            public boolean showBeforeProvisioning() {
+                return true;
+            }
+        };
     }
 
     private Action getBugReportAction() {

@@ -407,7 +407,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     }
     
     private Action getRebootAction() {
-        return new SinglePressAction(0, //com.android.internal.R.drawable.ic_lock_reboot,
+        return new SinglePressAction(com.android.internal.R.drawable.ic_lock_reboot,
                 R.string.global_action_reboot) {
 
             @Override
@@ -428,7 +428,7 @@ class GlobalActions implements DialogInterface.OnDismissListener, DialogInterfac
     }
     
     private Action getRebootRecoveryAction() {
-        return new SinglePressAction(0, //com.android.internal.R.drawable.ic_lock_reboot_recovery,
+        return new SinglePressAction(com.android.internal.R.drawable.ic_lock_profile,
                 R.string.global_action_reboot_recovery) {
 
             @Override
